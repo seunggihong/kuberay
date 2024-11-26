@@ -6,14 +6,15 @@
 # in this Helm chart.
 
 image:
-  repository: rayproject/ray
-  tag: 2.9.0
+  repository: onggizam/raydp
+  tag: latest
   pullPolicy: IfNotPresent
 
-nameOverride: "kuberay"
-fullnameOverride: ""
+nameOverride: 'kuberay'
+fullnameOverride: ''
 
-imagePullSecrets: []
+imagePullSecrets:
+  []
   # - name: an-existing-secret
 
 # common defined values shared between the head and worker
@@ -34,29 +35,29 @@ head:
   # autoscalerOptions is an OPTIONAL field specifying configuration overrides for the Ray autoscaler.
   # The example configuration shown below represents the DEFAULT values.
   # autoscalerOptions:
-    # upscalingMode: Default
-    # idleTimeoutSeconds is the number of seconds to wait before scaling down a worker pod which is not using Ray resources.
-    # idleTimeoutSeconds: 60
-    # imagePullPolicy optionally overrides the autoscaler container's default image pull policy (IfNotPresent).
-    # imagePullPolicy: IfNotPresent
-    # Optionally specify the autoscaler container's securityContext.
-    # securityContext: {}
-    # env: []
-    # envFrom: []
-    # resources specifies optional resource request and limit overrides for the autoscaler container.
-    # For large Ray clusters, we recommend monitoring container resource usage to determine if overriding the defaults is required.
-    # resources:
-    #   limits:
-    #     cpu: "500m"
-    #     memory: "512Mi"
-    #   requests:
-    #     cpu: "500m"
-    #     memory: "512Mi"
+  # upscalingMode: Default
+  # idleTimeoutSeconds is the number of seconds to wait before scaling down a worker pod which is not using Ray resources.
+  # idleTimeoutSeconds: 60
+  # imagePullPolicy optionally overrides the autoscaler container's default image pull policy (IfNotPresent).
+  # imagePullPolicy: IfNotPresent
+  # Optionally specify the autoscaler container's securityContext.
+  # securityContext: {}
+  # env: []
+  # envFrom: []
+  # resources specifies optional resource request and limit overrides for the autoscaler container.
+  # For large Ray clusters, we recommend monitoring container resource usage to determine if overriding the defaults is required.
+  # resources:
+  #   limits:
+  #     cpu: "500m"
+  #     memory: "512Mi"
+  #   requests:
+  #     cpu: "500m"
+  #     memory: "512Mi"
   labels: {}
   # Note: From KubeRay v0.6.0, users need to create the ServiceAccount by themselves if they specify the `serviceAccountName`
   # in the headGroupSpec. See https://github.com/ray-project/kuberay/pull/1128 for more details.
-  serviceAccountName: ""
-  restartPolicy: ""
+  serviceAccountName: ''
+  restartPolicy: ''
   rayStartParams:
     dashboard-host: '0.0.0.0'
   # containerEnv specifies environment variables for the Ray container,
@@ -64,7 +65,8 @@ head:
   containerEnv: []
   # - name: EXAMPLE_ENV
   #   value: "1"
-  envFrom: []
+  envFrom:
+    []
     # - secretRef:
     #     name: my-env-secret
   # ports optionally allows specifying ports for the Ray container.
@@ -80,12 +82,12 @@ head:
   # for further guidance.
   resources:
     limits:
-      cpu: "1"
+      cpu: '2'
       # To avoid out-of-memory issues, never allocate less than 2G memory for the Ray head.
-      memory: "2G"
+      memory: '10G'
     requests:
-      cpu: "1"
-      memory: "2G"
+      cpu: '2'
+      memory: '10G'
   annotations: {}
   nodeSelector: {}
   tolerations: []
@@ -111,7 +113,8 @@ head:
   args: []
   # Optional, for the user to provide any additional fields to the service.
   # See https://pkg.go.dev/k8s.io/Kubernetes/pkg/api/v1#Service
-  headService: {}
+  headService:
+    {}
     # metadata:
     #   annotations:
     #     prometheus.io/scrape: "true"
@@ -129,25 +132,25 @@ head:
   #     - name: edns0
   topologySpreadConstraints: {}
 
-
 worker:
   # If you want to disable the default workergroup
   # uncomment the line below
   # disabled: true
   groupName: workergroup
-  replicas: 1
+  replicas: 2
   minReplicas: 1
   maxReplicas: 3
   labels: {}
-  serviceAccountName: ""
-  restartPolicy: ""
+  serviceAccountName: ''
+  restartPolicy: ''
   rayStartParams: {}
   # containerEnv specifies environment variables for the Ray container,
   # Follows standard K8s container env schema.
   containerEnv: []
   # - name: EXAMPLE_ENV
   #   value: "1"
-  envFrom: []
+  envFrom:
+    []
     # - secretRef:
     #     name: my-env-secret
   # ports optionally allows specifying ports for the Ray container.
@@ -163,11 +166,11 @@ worker:
   # for further guidance.
   resources:
     limits:
-      cpu: "1"
-      memory: "1G"
+      cpu: '2'
+      memory: '10G'
     requests:
-      cpu: "1"
-      memory: "1G"
+      cpu: '2'
+      memory: '10G'
   annotations: {}
   nodeSelector: {}
   tolerations: []
@@ -193,7 +196,6 @@ worker:
   args: []
   topologySpreadConstraints: {}
 
-
   # Custom pod DNS configuration
   # See https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
   # dnsConfig:
@@ -217,17 +219,19 @@ additionalWorkerGroups:
     minReplicas: 0
     maxReplicas: 3
     labels: {}
-    serviceAccountName: ""
-    restartPolicy: ""
+    serviceAccountName: ''
+    restartPolicy: ''
     rayStartParams: {}
     # containerEnv specifies environment variables for the Ray container,
     # Follows standard K8s container env schema.
-    containerEnv: []
+    containerEnv:
+      []
       # - name: EXAMPLE_ENV
       #   value: "1"
-    envFrom: []
-        # - secretRef:
-        #     name: my-env-secret
+    envFrom:
+      []
+      # - secretRef:
+      #     name: my-env-secret
     # ports optionally allows specifying ports for the Ray container.
     # ports: []
     # resource requests and limits for the Ray head container.
@@ -242,10 +246,10 @@ additionalWorkerGroups:
     resources:
       limits:
         cpu: 1
-        memory: "1G"
+        memory: '1G'
       requests:
         cpu: 1
-        memory: "1G"
+        memory: '1G'
     annotations: {}
     nodeSelector: {}
     tolerations: []
